@@ -1,13 +1,13 @@
 package pokemon;
 
 public class Pokemon {
-    private int DEFAULT_IV = 15;
+    private final int DEFAULT_IV = 15;
 
     private String name;
     private Move[] moves;
     private String[] type;
     private int level;
-    private int hp, atk, def, spAtk, spDef, speed;
+    private int maxHp, hp, atk, def, spAtk, spDef, speed;
 
     public Pokemon(Pokedex dex, String name, Move[] moves, int level) {
         Pokemon checkPkmn = dex.getPkmn(name);
@@ -28,7 +28,8 @@ public class Pokemon {
         type = checkPkmn.type;
         this.level = level;
 
-        hp = calculateHp(checkPkmn.hp);
+        maxHp = calculateHp(checkPkmn.hp);
+        hp = maxHp;
         atk = calculateStat(checkPkmn.atk);
         def = calculateStat(checkPkmn.def);
         spAtk = calculateStat(checkPkmn.spAtk);
@@ -50,6 +51,21 @@ public class Pokemon {
         level = 1;
     }
 
+    public void takeDamage(int amount) {
+        hp -= amount;
+        System.out.println(name + " took " + amount + " damage.");
+    }
+
+    public String getName() { return name; }
+    public String[] getType() { return type; }
+    public int getLevel() { return level; }
+    public int getHp() { return hp; }
+    public int getAtk() { return atk; }
+    public int getDef() {return def; }
+    public int getSpAtk() { return spAtk; }
+    public int getSpDef() { return spDef; }
+    public int getSpeed() { return speed; }
+
     private int calculateHp(int baseHp) {
         // integer division is okay here, since the original formula uses a floor function after the division
         return (2 * baseHp + DEFAULT_IV) * level / 100 + level + 10;
@@ -70,12 +86,12 @@ public class Pokemon {
         }
         toReturn += "\n\n";
 
-        toReturn += "HP: " + hp + "\n";
+        toReturn += "HP: " + hp + "/" + maxHp + "\n";
         toReturn += "Attack: " + atk + "\n";
         toReturn += "Defense: " + def + "\n";
         toReturn += "Special Attack: " + spAtk + "\n";
         toReturn += "Special Defense: " + spDef + "\n";
-        toReturn += "Speed: " + speed;
+        toReturn += "Speed: " + speed + "\n";
 
         return toReturn;
     }
