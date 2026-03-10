@@ -16,6 +16,14 @@ public class Pokedex {
         loadJson();
     }
 
+    public Pokemon getPkmn(String name) {
+        if (!pkmnMap.containsKey(name)) {
+            return null;
+        }
+
+        return pkmnMap.get(name);
+    }
+
     private void loadJson() {
         try {
             JSONParser parser = new JSONParser();
