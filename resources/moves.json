@@ -1,0 +1,136 @@
+{
+    "_comment": "Moves with todo marked as true have special effects that will be added later",
+
+    "Air Slash": {
+        "category": "Special",
+        "type": "Flying",
+        "power": 75,
+        "pp": 15,
+        "accuracy": 0.95,
+        "todo": true
+    },
+
+    "Dragon Breath": {
+        "category": "Special",
+        "type": "Dragon",
+        "power": 60,
+        "pp": 20,
+        "accuracy": 1,
+        "todo": true
+    },
+
+    "Dragon Claw": {
+        "category": "Physical",
+        "type": "Dragon",
+        "power": 80,
+        "pp": 15,
+        "accuracy": 1
+    },
+
+    "Ember": {
+        "category": "Special",
+        "type": "Fire",
+        "power": 40,
+        "pp": 25,
+        "accuracy": 1,
+        "todo": true
+    },
+
+    "Fire Fang": {
+        "category": "Physical",
+        "type": "Fire",
+        "power": 65,
+        "pp": 15,
+        "accuracy": 0.95,
+        "todo": true
+    },
+
+    "Fire Spin": {
+        "category": "Special",
+        "type": "Fire",
+        "power": 35,
+        "pp": 15,
+        "accuracy": 0.85,
+        "todo": true
+    },
+
+    "Flamethrower": {
+        "category": "Special",
+        "type": "Fire",
+        "power": 90,
+        "pp": 15,
+        "accuracy": 1,
+        "todo": true
+    },
+
+    "Fare Blitz": {
+        "category": "Physical",
+        "type": "Fire",
+        "power": 120,
+        "pp": 15,
+        "accuracy": 1,
+        "todo": true
+    },
+
+    "Growl": {
+        "category": "Status",
+        "type": "Normal",
+        "power": 0,
+        "pp": 40,
+        "accuracy": 1,
+        "todo": true
+    },
+
+    "Heat Wave": {
+        "category": "Special",
+        "type": "Fire",
+        "power": 95,
+        "pp": 10,
+        "accuracy": 0.9,
+        "todo": true
+    },
+
+    "Inferno": {
+        "category": "Special",
+        "type": "Fire",
+        "power": 100,
+        "pp": 5,
+        "accuracy": 0.50,
+        "todo": true
+    },
+
+    "Scary Face": {
+        "category": "Status",
+        "type": "Normal",
+        "power": 0,
+        "pp": 10,
+        "accuracy": 1,
+        "todo": true
+    },
+
+    "Scatch": {
+        "category": "Physical",
+        "type": "Normal",
+        "power": 40,
+        "pp": 35,
+        "accuracy": 1
+    },
+
+    "Slash": {
+        "category": "Physical",
+        "type": "Normal",
+        "power": 70,
+        "pp": 20,
+        "accuracy": 1,
+        "todo": true
+    },
+
+    "Smokescreen": {
+        "category": "Status",
+        "type": "Normal",
+        "power": 0,
+        "pp": 20,
+        "accuracy": 1,
+        "todo": true
+    }
+}
