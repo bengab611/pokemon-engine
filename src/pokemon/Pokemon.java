@@ -3,8 +3,6 @@ package pokemon;
 public class Pokemon {
     private int DEFAULT_IV = 15;
 
-    private Pokedex pokedex;
-
     private String name;
     private Move[] moves;
     private String[] type;
@@ -60,5 +58,25 @@ public class Pokemon {
     private int calculateStat(int baseStat) {
         // integer division is okay here, same as above
         return (2 * baseStat + DEFAULT_IV) * level / 100 + 5;
+    }
+
+    @Override
+    public String toString() {
+        String toReturn = "";
+        toReturn += name + "lvl " + level + "\n";
+        toReturn += type[0];
+        if (!type[1].equals("")) {
+            toReturn += ", " + type[1];
+        }
+        toReturn += "\n\n";
+
+        toReturn += "HP: " + hp + "\n";
+        toReturn += "Attack: " + atk + "\n";
+        toReturn += "Defense: " + def + "\n";
+        toReturn += "Special Attack: " + spAtk + "\n";
+        toReturn += "Special Defense: " + spDef + "\n";
+        toReturn += "Speed: " + speed;
+
+        return toReturn;
     }
 }
