@@ -1,8 +1,8 @@
 package pokemon;
 
 public class Trainer {
-    String name;
-    Pokemon[] team;
+    private String name;
+    private Pokemon[] team;
 
     public Trainer(String name) {
         this.name = name;
@@ -24,6 +24,7 @@ public class Trainer {
         team[pkmnToReplace] = newPkmn;
     }
 
+    public String getName() { return name; }
     public Pokemon getPokemon(int index) { return team[index]; }
     public Pokemon[] getTeam() { return team; }
 }
