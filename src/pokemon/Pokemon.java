@@ -63,7 +63,7 @@ public class Pokemon {
     @Override
     public String toString() {
         String toReturn = "";
-        toReturn += name + "lvl " + level + "\n";
+        toReturn += name + " lvl " + level + "\n";
         toReturn += type[0];
         if (!type[1].equals("")) {
             toReturn += ", " + type[1];
