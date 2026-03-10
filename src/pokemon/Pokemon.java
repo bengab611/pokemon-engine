@@ -15,8 +15,8 @@ public class Pokemon {
             throw new IllegalArgumentException("Invalid Pokemon name");
         }
 
-        if (moves.length < 1 || moves.length > 4) {
-            throw new IllegalArgumentException("Pokemon can't know less than 1 or more than 4 moves");
+        if (moves.length != 4) {
+            throw new IllegalArgumentException("Invalid moveset");
         }
 
         if (level < 1 || level > 100) {
@@ -54,6 +54,19 @@ public class Pokemon {
     public void takeDamage(int amount) {
         hp -= amount;
         System.out.println(name + " took " + amount + " damage.");
+    }
+
+    public void addMove(Move newMove) {
+        for (Move move : moves) {
+            if (move == null) {
+                move = newMove;
+                break;
+            }
+        }
+    }
+
+    public void replaceMove(Move newMove, int moveToReplace) {
+        moves[moveToReplace] = newMove;
     }
 
     public String getName() { return name; }
