@@ -12,6 +12,7 @@ public class Pokemon {
     private int hp, atk, def, spAtk, spDef, speed;
 
     public Pokemon(String name, Move[] moves, int level) {
+        pokedex = new Pokedex();
         Pokemon checkPkmn = pokedex.getPkmn(name);
         if (checkPkmn == null) {
             throw new IllegalArgumentException("Invalid Pokemon name");
