@@ -69,6 +69,17 @@ public class Pokemon {
         moves[moveToReplace] = newMove;
     }
 
+    public String movesToString() {
+        String toReturn = "";
+        for (Move move : moves) {
+            if (move != null) {
+                toReturn += move.toString() + "\n";
+            }
+        }
+
+        return toReturn;
+    }
+
     public String getName() { return name; }
     public String[] getType() { return type; }
     public int getLevel() { return level; }
