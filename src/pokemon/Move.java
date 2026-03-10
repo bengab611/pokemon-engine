@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Move {
     private String name, category, type;
-    private int power, pp;
+    private int power, pp, maxPp;
     private double accuracy;
 
     private Random random;
@@ -13,12 +13,28 @@ public class Move {
 
     private boolean critical;
 
+    public Move(Movedex dex, String name) {
+        Move checkMove = dex.getMove(name);
+        if (checkMove == null) {
+            throw new IllegalArgumentException("Invalid move name");
+        }
+
+        this.name = name;
+        this.category = checkMove.category;
+        this.type = checkMove.type;
+        this.power = checkMove.power;
+        this.pp = checkMove.pp;
+        maxPp = pp;
+        this.accuracy = checkMove.accuracy;
+    }
+
     public Move(String name, String category, String type, int power, int pp, double accuracy) {
         this.name = name;
         this.category = category;
         this.type = type;
         this.power = power;
         this.pp = pp;
+        maxPp = pp;
         this.accuracy = accuracy;
 
         random = new Random();
