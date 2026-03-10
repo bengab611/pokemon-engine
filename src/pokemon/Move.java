@@ -95,4 +95,17 @@ public class Move {
         }
         return (int) Math.round(damage);
     }
+
+    @Override
+    public String toString() {
+        String toReturn = name + ": \n";
+        toReturn += "PP: " + pp + "/" + maxPp + "\n";
+        toReturn += category + " " + type + "\n";
+        
+        if (!category.equals("Status")) {
+            toReturn += " " + power + " power\n";
+        }
+
+        return toReturn;
+    }
 }
