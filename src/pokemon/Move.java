@@ -3,12 +3,9 @@ package pokemon;
 import java.util.Random;
 
 public class Move {
-    private String name;
-    private String category;
-    private String type;
-    private int pp;
+    private String name, category, type;
+    private int power, pp;
     private double accuracy;
-    private int power;
 
     private Random random;
     private final int RANDOM_MIN = 85;
@@ -16,13 +13,13 @@ public class Move {
 
     private boolean critical;
 
-    public Move(String name, String category, String type, int pp, double accuracy, int power) {
+    public Move(String name, String category, String type, int power, int pp, double accuracy) {
         this.name = name;
         this.category = category;
         this.type = type;
+        this.power = power;
         this.pp = pp;
         this.accuracy = accuracy;
-        this.power = power;
 
         random = new Random();
 
