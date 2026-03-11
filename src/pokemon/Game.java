@@ -8,8 +8,10 @@ public class Game {
 
     private Trainer[] trainers;
     private Pokemon[] activePkmn;
+    private Move[] nextMoves;
+    private int[] nextMovesPriority;
 
-    private boolean isActive;
+    private boolean winFlag;
     
     Scanner scan;
 
@@ -20,22 +22,61 @@ public class Game {
         movedex = new Movedex();
 
         trainers = new Trainer[2];
+        nextMoves = new Move[2];
+        nextMovesPriority = new int[2];
+
+        winFlag = false;
 
         System.out.println("Trainer One: ");
-        initializeTrainer(trainers[0]);
+        initializeTrainer(0);
         System.out.println("Trainer Two: ");
-        initializeTrainer(trainers[1]);
+        initializeTrainer(1);
         
         initializeBattle();
+
+        while (!winFlag) {
+            chooseAction(0);
+            chooseAction(1);
+        }
     }
 
-    private void initializeTrainer(Trainer trainer) {
+    private void chooseAction(int indexOfTrainer) {
+        System.out.println("What will " + trainers[indexOfTrainer].getName() + " do?");
+        System.out.println("1. Attack");
+        System.out.println("2. Switch Pokemon");
+        System.out.println("3. Use Item");
+
+        String action = scan.nextLine();
+        if (action.equals("1") || action.toLowerCase().equals("attack")) {
+            nextMoves[indexOfTrainer] = chooseMove(activePkmn[indexOfTrainer]);
+        }
+    }
+
+    private Move chooseMove(Pokemon pkmn) {
+        System.out.println("Select a move: \n");
+        System.out.println(pkmn.movesToString());
+
+        String move = scan.nextLine();
+
+        for (int i = 0; i < 4; i++) {
+            if (pkmn.getMove(i) != null) {
+                if (move.equals(String.valueOf(i + 1)) || move.toLowerCase().equals(pkmn.getMove(i).getName().toLowerCase())) {
+                    return pkmn.getMove(i);
+                }
+            }
+        }
+
+        System.out.println("Invalid move. Enter number or name of move.");
+        return chooseMove(pkmn);
+    }
+
+    private void initializeTrainer(int indexOfTrainer) {
         System.out.println("Enter your name:");
-        trainer = new Trainer(scan.nextLine());
-        initializePokemon(trainer);
+        trainers[indexOfTrainer] = new Trainer(scan.nextLine());
+        initializePokemon(indexOfTrainer);
     }
 
-    private void initializePokemon(Trainer trainer) {
+    private void initializePokemon(int indexOfTrainer) {
         String name;
         int level;
 
@@ -55,10 +96,10 @@ public class Game {
             scan.nextLine();
 
             try {
-                trainer.addPkmn(new Pokemon(pokedex, name, level));
+                trainers[indexOfTrainer].addPkmn(new Pokemon(pokedex, name, level));
 
-                System.out.println(trainer.getPkmn(i));
-                initializeMoves(trainer.getPkmn(i));
+                System.out.println(trainers[indexOfTrainer].getPkmn(i));
+                initializeMoves(trainers[indexOfTrainer].getPkmn(i));
             }
             catch (IllegalArgumentException e) {
                 System.out.println("Invalid Pokemon name and/or level, try again.");
