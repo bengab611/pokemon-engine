@@ -60,6 +60,13 @@ public class Move {
         }
     }
 
+    public String getName() { return name; }
+    public String getCategory() { return category; }
+    public String getType() { return type; }
+    public int getPower() { return power; }
+    public int getPp() { return pp; }
+    public double getAccuracy() { return accuracy; }
+
     private int calculateDamage(Pokemon user, Pokemon target) {
         if (category.equals("Status")) {
             return 0;
