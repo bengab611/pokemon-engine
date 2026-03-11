@@ -15,7 +15,7 @@
         "type": "Dragon",
         "power": 60,
         "pp": 20,
-        "accuracy": 1,
+        "accuracy": 1.0,
         "todo": true
     },
 
@@ -24,7 +24,7 @@
         "type": "Dragon",
         "power": 80,
         "pp": 15,
-        "accuracy": 1
+        "accuracy": 1.0
     },
 
     "Ember": {
@@ -32,7 +32,7 @@
         "type": "Fire",
         "power": 40,
         "pp": 25,
-        "accuracy": 1,
+        "accuracy": 1.0,
         "todo": true
     },
 
@@ -59,7 +59,7 @@
         "type": "Fire",
         "power": 90,
         "pp": 15,
-        "accuracy": 1,
+        "accuracy": 1.0,
         "todo": true
     },
 
@@ -68,7 +68,7 @@
         "type": "Fire",
         "power": 120,
         "pp": 15,
-        "accuracy": 1,
+        "accuracy": 1.0,
         "todo": true
     },
 
@@ -77,7 +77,7 @@
         "type": "Normal",
         "power": 0,
         "pp": 40,
-        "accuracy": 1,
+        "accuracy": 1.0,
         "todo": true
     },
 
@@ -104,16 +104,16 @@
         "type": "Normal",
         "power": 0,
         "pp": 10,
-        "accuracy": 1,
+        "accuracy": 1.0,
         "todo": true
     },
 
-    "Scatch": {
+    "Scratch": {
         "category": "Physical",
         "type": "Normal",
         "power": 40,
         "pp": 35,
-        "accuracy": 1
+        "accuracy": 1.0
     },
 
     "Slash": {
@@ -121,7 +121,7 @@
         "type": "Normal",
         "power": 70,
         "pp": 20,
-        "accuracy": 1,
+        "accuracy": 1.0,
         "todo": true
     },
 
@@ -130,7 +130,7 @@
         "type": "Normal",
         "power": 0,
         "pp": 20,
-        "accuracy": 1,
+        "accuracy": 1.0,
         "todo": true
     }
 }
