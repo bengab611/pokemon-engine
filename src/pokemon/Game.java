@@ -231,11 +231,18 @@ public class Game {
         String nextPkmn = scan.nextLine();
         for (int i = 0; i < trainers[indexOfTrainer].getTeam().length; i++) {
             if (nextPkmn.equals(String.valueOf(i + 1)) || nextPkmn.toLowerCase().equals(trainers[indexOfTrainer].getPkmn(i).getName().toLowerCase())) {
+                if (trainers[indexOfTrainer].getPkmn(i).getHp() == 0) {
+                    System.out.println("You can't send out a fainted Pokemon.");
+                    break;
+                }
+
                 activePkmn[indexOfTrainer] = trainers[indexOfTrainer].getPkmn(i);
                 System.out.println(trainers[indexOfTrainer].getName() + " sent out " + activePkmn[indexOfTrainer].getName() + ".");
                 return;
             }
         }
+
+        sendPkmn(indexOfTrainer);
     }
 
     private void sendPkmn(int indexOfTrainer, int indexOfPkmn) {
