@@ -37,7 +37,7 @@ public class Movedex {
 
             for (Object key : allMoves.keySet()) {
                 // TODO: Remove conditional after comment is removed
-                if (((String) key).equals("_comment")) {
+                if (((String) key).equals("_comment") || ((String) key).equals("_comment2")) {
                     continue;
                 }
 
