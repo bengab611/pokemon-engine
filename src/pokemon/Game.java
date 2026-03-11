@@ -1,6 +1,7 @@
 package pokemon;
 
 import java.util.Scanner;
+import java.util.Random;
 
 public class Game {
     private Pokedex pokedex;
@@ -9,21 +10,23 @@ public class Game {
     private Trainer[] trainers;
     private Pokemon[] activePkmn;
     private Move[] nextMoves;
-    private int[] nextMovesPriority;
+    private int[] movePriority;
 
     private boolean winFlag;
     
     Scanner scan;
+    Random rand;
 
     public Game() {
         scan = new Scanner(System.in);
+        rand = new Random();
         
         pokedex = new Pokedex();
         movedex = new Movedex();
 
         trainers = new Trainer[2];
         nextMoves = new Move[2];
-        nextMovesPriority = new int[2];
+        movePriority = new int[2];
 
         winFlag = false;
 
@@ -37,6 +40,7 @@ public class Game {
         while (!winFlag) {
             chooseAction(0);
             chooseAction(1);
+            calculateMovePriority();
         }
     }
 
@@ -68,6 +72,23 @@ public class Game {
 
         System.out.println("Invalid move. Enter number or name of move.");
         return chooseMove(pkmn);
+    }
+
+    private void calculateMovePriority() {
+        if (activePkmn[0].getSpeed() > activePkmn[1].getSpeed()) {
+            movePriority[0] = 1;
+            movePriority[1] = 0;
+        }
+
+        if (activePkmn[0].getSpeed() < activePkmn[1].getSpeed()) {
+            movePriority[0] = 0;
+            movePriority[1] = 1;
+        }
+
+        else {
+            movePriority[0] = rand.nextInt() % 2;
+            movePriority[1] = (movePriority[0] + 1) % 2;
+        }
     }
 
     private void initializeTrainer(int indexOfTrainer) {
