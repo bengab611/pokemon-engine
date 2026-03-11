@@ -10,9 +10,9 @@ public class Trainer {
     }
 
     public void addPokemon(Pokemon newPkmn) {
-        for (Pokemon pkmn : team) {
-            if (pkmn == null) {
-                pkmn = newPkmn;
+        for (int i = 0; i < 6; i++) {
+            if (team[i] == null) {
+                team[i] = newPkmn;
                 return;
             }
         }
