@@ -80,6 +80,7 @@ public class Pokemon {
     public String[] getType() { return type; }
     public int getLevel() { return level; }
     public int getHp() { return hp; }
+    public int getMaxHp() { return maxHp; }
     public int getAtk() { return atk; }
     public int getDef() {return def; }
     public int getSpAtk() { return spAtk; }
