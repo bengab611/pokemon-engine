@@ -51,12 +51,14 @@ public class Pokemon {
     }
 
     public void addMove(Move newMove) {
-        for (Move move : moves) {
-            if (move == null) {
-                move = newMove;
-                break;
+        for (int i = 0; i < 4; i++) {
+            if (moves[i] == null) {
+                moves[i] = newMove;
+                return;
             }
         }
+
+        System.out.println(name + " already knows 4 moves.");
     }
 
     public void replaceMove(Move newMove, int moveToReplace) {
