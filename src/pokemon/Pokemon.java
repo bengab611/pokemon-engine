@@ -9,7 +9,7 @@ public class Pokemon {
     private int level;
     private int maxHp, hp, atk, def, spAtk, spDef, speed;
 
-    public Pokemon(Pokedex dex, String name, Move[] moves, int level) {
+    public Pokemon(Pokedex dex, String name, int level) {
         Pokemon checkPkmn = dex.getPkmn(name);
         if (checkPkmn == null) {
             throw new IllegalArgumentException("Invalid Pokemon name");
@@ -20,7 +20,7 @@ public class Pokemon {
         }
 
         this.name = name;
-        this.moves = moves;
+        moves = new Move[4];
         type = checkPkmn.type;
         this.level = level;
 
@@ -28,7 +28,7 @@ public class Pokemon {
     }
 
     public Pokemon(Pokedex dex, String name) {
-        this(dex, name, new Move[4], 1);
+        this(dex, name, 1);
     }
 
     public Pokemon(String name, String[] type, int hp, int atk, int def, int spAtk, int spDef, int speed) {
