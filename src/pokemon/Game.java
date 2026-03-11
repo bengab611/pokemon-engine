@@ -9,6 +9,7 @@ public class Game {
 
     private Trainer[] trainers;
     private Pokemon[] activePkmn;
+    private boolean[] fainted;
     private Move[] nextMoves;
     private int[] movePriority;
 
@@ -27,6 +28,11 @@ public class Game {
         trainers = new Trainer[2];
         nextMoves = new Move[2];
         movePriority = new int[2];
+        fainted = new boolean[2];
+        
+        for (int i = 0; i < fainted.length; i++) {
+            fainted[i] = false;
+        }
 
         winFlag = false;
 
@@ -38,12 +44,18 @@ public class Game {
         initializeBattle();
 
         while (!winFlag) {
+            for (int i = 0; i < fainted.length; i++) {
+                // TODO: winFlag = true if trainer is out of pokemon
+                if (fainted[i]) {
+                    sendPkmn(i, 1);
+                }
+            }
             cycle();
         }
     }
 
     private void cycle() {
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < trainers.length; i++) {
             System.out.print(trainers[i].getName() + "'s " + activePkmn[i].getName());
             System.out.println(" " + activePkmn[i].getHp() + "/" + activePkmn[i].getMaxHp() + " HP");
         }
@@ -72,7 +84,7 @@ public class Game {
 
         String move = scan.nextLine();
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < pkmn.getMoves().length; i++) {
             if (pkmn.getMove(i) != null) {
                 if (move.equals(String.valueOf(i + 1)) || move.toLowerCase().equals(pkmn.getMove(i).getName().toLowerCase())) {
                     return pkmn.getMove(i);
@@ -105,11 +117,16 @@ public class Game {
         if (movePriority[0] < movePriority[1]) {
             Move temp = nextMoves[0];
             nextMoves[0] = nextMoves[1];
-            nextMoves[1] = nextMoves[0];
+            nextMoves[1] = temp;
         }
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < nextMoves.length; i++) {
             nextMoves[i].execute(activePkmn[i], activePkmn[(i + 1) % 2]);
+            if (activePkmn[(i + 1) % 2].getHp() == 0) {
+                System.out.println(activePkmn[(i + 1) % 2].getName() + " fainted!");
+                fainted[(i + 1) % 2] = true;
+                break;
+            }
         }
     }
 
@@ -123,7 +140,7 @@ public class Game {
         String name;
         int level;
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < trainers[indexOfTrainer].getTeam().length; i++) {
             System.out.println("What will Pokemon #" + (i + 1) + " be?");
             if (i > 0) {
                 System.out.println("To continue with " +  i + " Pokemon, enter \"done\".");
@@ -155,7 +172,7 @@ public class Game {
         String name;
         System.out.println("What moves will " + pkmn.getName() + " know?");
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < pkmn.getMoves().length; i++) {
             System.out.println("Enter move #" + (i + 1));
             if (i > 0) {
                 System.out.println("To continue with " + i + " moves, enter \"done\"");
@@ -185,6 +202,7 @@ public class Game {
         sendPkmn(1, 0);
     }
 
+    // TODO: ask user for pokemon
     private void sendPkmn(int indexOfTrainer, int indexOfPkmn) {
         activePkmn[indexOfTrainer] = trainers[indexOfTrainer].getPkmn(indexOfPkmn);
         System.out.println(trainers[indexOfTrainer].getName() + " sent out " + activePkmn[indexOfTrainer].getName() + ".");
