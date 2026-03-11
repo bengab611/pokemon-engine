@@ -6,6 +6,7 @@ import java.util.Random;
 public class Game {
     private Pokedex pokedex;
     private Movedex movedex;
+    private TypeChart typeChart;
 
     private Trainer[] trainers;
     private Pokemon[] activePkmn;
@@ -25,6 +26,7 @@ public class Game {
         
         pokedex = new Pokedex();
         movedex = new Movedex();
+        typeChart = new TypeChart();
 
         trainers = new Trainer[2];
         nextMoves = new Move[2];
@@ -54,7 +56,7 @@ public class Game {
                         indexOfWinner = (i + 1) % 2;
                         break;
                     }
-                    
+
                     sendPkmn(i);
                     fainted[i] = false;
                 }
@@ -134,7 +136,7 @@ public class Game {
         }
 
         for (int i = 0; i < nextMoves.length; i++) {
-            nextMoves[i].execute(activePkmn[i], activePkmn[(i + 1) % 2]);
+            nextMoves[i].execute(typeChart, activePkmn[i], activePkmn[(i + 1) % 2]);
             System.out.println();
             if (activePkmn[(i + 1) % 2].getHp() == 0) {
                 System.out.println(activePkmn[(i + 1) % 2].getName() + " fainted!");

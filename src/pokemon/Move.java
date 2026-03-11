@@ -12,6 +12,7 @@ public class Move {
     private final int RANDOM_MAX = 100;
 
     private boolean critical;
+    private double typeMultiplier;
 
     public Move(Movedex dex, String name) {
         Move checkMove = dex.getMove(name);
@@ -44,7 +45,7 @@ public class Move {
         critical = false;
     }
 
-    public void execute(Pokemon user, Pokemon target) {
+    public void execute(TypeChart typeChart, Pokemon user, Pokemon target) {
         System.out.println(user.getName() + " used " + name + ".");
         pp--;
 
@@ -54,10 +55,23 @@ public class Move {
             return;
         }
 
-        int damage = calculateDamage(user, target);
+        int damage = calculateDamage(typeChart, user, target);
         if (damage > target.getHp()) {
             damage = target.getHp();
         }
+
+        if (typeMultiplier == 0.0) {
+            System.out.println("It doesn't affect " + target.getName() + "...");
+        }
+
+        if (typeMultiplier > 0.0 && typeMultiplier < 1.0) {
+            System.out.println("It's not very effective...");
+        }
+
+        if (typeMultiplier > 1.0) {
+            System.out.println("It's super effective!");
+        }
+
         target.takeDamage(damage);
 
         if (critical) {
@@ -72,7 +86,7 @@ public class Move {
     public int getPp() { return pp; }
     public double getAccuracy() { return accuracy; }
 
-    private int calculateDamage(Pokemon user, Pokemon target) {
+    private int calculateDamage(TypeChart typeChart, Pokemon user, Pokemon target) {
         if (category.equals("Status")) {
             return 0;
         }
@@ -101,6 +115,12 @@ public class Move {
         if (type.equals(user.getType()[0]) || type.equals(user.getType()[1])) {
             damage *= 1.5;
         }
+
+        typeMultiplier = typeChart.getEffectiveness(type, target.getType()[0]);
+        if (target.getType()[1] != null) {
+            typeMultiplier *= typeChart.getEffectiveness(type, target.getType()[1]);
+        }
+        damage *= typeMultiplier;
 
         if (Double.compare(damage % 1, 0.5) < 1E-9) {
             return (int) Math.floor(damage);
