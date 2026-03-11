@@ -15,10 +15,6 @@ public class Pokemon {
             throw new IllegalArgumentException("Invalid Pokemon name");
         }
 
-        if (moves.length != 4) {
-            throw new IllegalArgumentException("Invalid moveset");
-        }
-
         if (level < 1 || level > 100) {
             throw new IllegalArgumentException("Pokemon level must be between 1 and 100 inclusive");
         }
@@ -28,13 +24,11 @@ public class Pokemon {
         type = checkPkmn.type;
         this.level = level;
 
-        maxHp = calculateHp(checkPkmn.hp);
-        hp = maxHp;
-        atk = calculateStat(checkPkmn.atk);
-        def = calculateStat(checkPkmn.def);
-        spAtk = calculateStat(checkPkmn.spAtk);
-        spDef = calculateStat(checkPkmn.spDef);
-        speed = calculateStat(checkPkmn.speed);
+        calculateStats(checkPkmn.hp, checkPkmn.atk, checkPkmn.def, checkPkmn.spAtk, checkPkmn.spDef, checkPkmn.speed)
+    }
+
+    public Pokemon(Pokedex dex, String name) {
+        this(dex, name, new Move[4], 1);
     }
 
     public Pokemon(String name, String[] type, int hp, int atk, int def, int spAtk, int spDef, int speed) {
@@ -47,7 +41,7 @@ public class Pokemon {
         this.spDef = spDef;
         this.speed = speed;
 
-        moves = null;
+        moves = new Move[4];
         level = 1;
     }
 
@@ -90,14 +84,16 @@ public class Pokemon {
     public int getSpDef() { return spDef; }
     public int getSpeed() { return speed; }
 
-    private int calculateHp(int baseHp) {
-        // integer division is okay here, since the original formula uses a floor function after the division
-        return (2 * baseHp + DEFAULT_IV) * level / 100 + level + 10;
-    }
+    private void calculateStats(int baseHp, int baseAtk, int baseDef, int baseSpAtk, int baseSpDef, int baseSpeed) {
+        // Intger division is fine here, since the original formulas use the floor function after division
+        maxHp = (2 * baseHp + DEFAULT_IV) * level / 100 + level + 10;
+        hp = maxHp;
 
-    private int calculateStat(int baseStat) {
-        // integer division is okay here, same as above
-        return (2 * baseStat + DEFAULT_IV) * level / 100 + 5;
+        atk = (2 * baseAtk + DEFAULT_IV) * level / 100 + 5;
+        def = (2 * baseDef + DEFAULT_IV) * level / 100 + 5;
+        spAtk = (2 * baseSpDef + DEFAULT_IV) * level / 100 + 5;
+        spDef = (2 * baseSpAtk + DEFAULT_IV) * level / 100 + 5;
+        speed = (2 * baseSpeed + DEFAULT_IV) * level / 100 + 5;
     }
 
     @Override
