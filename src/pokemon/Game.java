@@ -47,7 +47,8 @@ public class Game {
             for (int i = 0; i < fainted.length; i++) {
                 // TODO: winFlag = true if trainer is out of pokemon
                 if (fainted[i]) {
-                    sendPkmn(i, 1);
+                    sendPkmn(i, 1, false);
+                    fainted[i] = false;
                 }
             }
             cycle();
@@ -198,12 +199,24 @@ public class Game {
         System.out.println("Battle!\n");
         
         activePkmn = new Pokemon[2];
-        sendPkmn(0, 0);
-        sendPkmn(1, 0);
+        sendPkmn(0, 0, true);
+        sendPkmn(1, 0, true);
     }
 
-    // TODO: ask user for pokemon
-    private void sendPkmn(int indexOfTrainer, int indexOfPkmn) {
+    // TODO: put the initialization in its own method
+    private void sendPkmn(int indexOfTrainer, int indexOfPkmn, boolean init) {
+        if (!init) {
+            System.out.println("What pokemon would " + trainers[indexOfTrainer].getName() + " like to send out?");
+            System.out.println(trainers[indexOfTrainer]);
+            String nextPkmn = scan.nextLine();
+            for (int i = 0; i < trainers[indexOfTrainer].getTeam().length; i++) {
+                if (nextPkmn.equals(String.valueOf(i + 1)) || nextPkmn.toLowerCase().equals(trainers[indexOfTrainer].getPkmn(i).getName().toLowerCase())) {
+                    indexOfPkmn = i;
+                    break;
+                }
+            }
+        }
+
         activePkmn[indexOfTrainer] = trainers[indexOfTrainer].getPkmn(indexOfPkmn);
         System.out.println(trainers[indexOfTrainer].getName() + " sent out " + activePkmn[indexOfTrainer].getName() + ".");
     }
