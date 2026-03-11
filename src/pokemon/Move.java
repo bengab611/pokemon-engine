@@ -26,6 +26,8 @@ public class Move {
         this.pp = checkMove.pp;
         maxPp = pp;
         this.accuracy = checkMove.accuracy;
+
+        random = new Random();
     }
 
     public Move(String name, String category, String type, int power, int pp, double accuracy) {
