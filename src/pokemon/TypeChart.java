@@ -36,7 +36,7 @@ public class TypeChart {
         types.add("Ghost");
         types.add("Steel");
         types.add("Fire");
-        types.add("water");
+        types.add("Water");
         types.add("Grass");
         types.add("Electric");
         types.add("Psychic");
@@ -47,6 +47,8 @@ public class TypeChart {
     }
 
     private void initializeMap() {
+        typeMap = new HashMap<>();
+
         for (String attackType : types) {
             HashMap<String, Double> innerMap = new HashMap<>();
 
@@ -73,7 +75,7 @@ public class TypeChart {
                 attackType = (String) key;
                 for (Object innerKey : defenseTypes.keySet()) {
                     defenseType = (String) innerKey;
-                    effectiveness = (Double) defenseTypes.get(key);
+                    effectiveness = (Double) defenseTypes.get(innerKey);
 
                     typeMap.get(attackType).put(defenseType, effectiveness);
                 }
