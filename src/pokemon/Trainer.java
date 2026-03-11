@@ -24,6 +24,16 @@ public class Trainer {
         team[pkmnToReplace] = newPkmn;
     }
 
+    public boolean isOutOfPkmn() {
+        for (int i = 0; i < team.length; i++) {
+            if (team[i] != null && team[i].getHp() > 0) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public String getName() { return name; }
     public Pokemon getPkmn(int index) { return team[index]; }
     public Pokemon[] getTeam() { return team; }

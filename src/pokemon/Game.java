@@ -14,6 +14,7 @@ public class Game {
     private int[] movePriority;
 
     private boolean winFlag;
+    private int indexOfWinner;
     
     Scanner scan;
     Random rand;
@@ -44,15 +45,23 @@ public class Game {
         initializeBattle();
 
         while (!winFlag) {
+            cycle();
             for (int i = 0; i < fainted.length; i++) {
-                // TODO: winFlag = true if trainer is out of pokemon
                 if (fainted[i]) {
+                    if (trainers[i].isOutOfPkmn()) {
+                        System.out.println(trainers[i].getName() + " is out of usable Pokemon.\n");
+                        winFlag = true;
+                        indexOfWinner = (i + 1) % 2;
+                        break;
+                    }
+                    
                     sendPkmn(i);
                     fainted[i] = false;
                 }
             }
-            cycle();
         }
+
+        System.out.println(trainers[indexOfWinner].getName() + " wins!");
     }
 
     private void cycle() {
