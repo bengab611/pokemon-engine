@@ -55,6 +55,9 @@ public class Move {
         }
 
         int damage = calculateDamage(user, target);
+        if (damage > target.getHp()) {
+            damage = target.getHp();
+        }
         target.takeDamage(damage);
 
         if (critical) {
