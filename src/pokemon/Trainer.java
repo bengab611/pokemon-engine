@@ -27,4 +27,16 @@ public class Trainer {
     public String getName() { return name; }
     public Pokemon getPkmn(int index) { return team[index]; }
     public Pokemon[] getTeam() { return team; }
+
+    @Override
+    public String toString() {
+        String toReturn = name + "\n";
+        for (int i = 0; i < team.length; i++) {
+            if (team[i] != null) {
+                toReturn += team[i].toString();
+            }
+        }
+
+        return toReturn;
+    }
 }
