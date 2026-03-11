@@ -102,13 +102,14 @@ public class Game {
     }
     
     private void executeActions() {
-        if (movePriority[0] > movePriority[1]) {
-            nextMoves[0].execute(activePkmn[0], activePkmn[1]);
-            nextMoves[1].execute(activePkmn[1], activePkmn[0]);
+        if (movePriority[0] < movePriority[1]) {
+            Move temp = nextMoves[0];
+            nextMoves[0] = nextMoves[1];
+            nextMoves[1] = nextMoves[0];
         }
-        else {
-            nextMoves[1].execute(activePkmn[1], activePkmn[0]);
-            nextMoves[0].execute(activePkmn[0], activePkmn[1]);
+
+        for (int i = 0; i < 2; i++) {
+            nextMoves[i].execute(activePkmn[i], activePkmn[(i + 1) % 2]);
         }
     }
 
