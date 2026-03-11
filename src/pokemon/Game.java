@@ -41,6 +41,7 @@ public class Game {
             chooseAction(0);
             chooseAction(1);
             calculateMovePriority();
+            executeActions();
         }
     }
 
@@ -88,6 +89,17 @@ public class Game {
         else {
             movePriority[0] = rand.nextInt() % 2;
             movePriority[1] = (movePriority[0] + 1) % 2;
+        }
+    }
+    
+    private void executeActions() {
+        if (movePriority[0] > movePriority[1]) {
+            nextMoves[0].execute(activePkmn[0], activePkmn[1]);
+            nextMoves[1].execute(activePkmn[1], activePkmn[0]);
+        }
+        else {
+            nextMoves[1].execute(activePkmn[1], activePkmn[0]);
+            nextMoves[0].execute(activePkmn[0], activePkmn[1]);
         }
     }
 
