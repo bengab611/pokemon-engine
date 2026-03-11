@@ -90,6 +90,10 @@ public class Game {
         if (action.equals("1") || action.toLowerCase().equals("attack")) {
             nextMoves[indexOfTrainer] = chooseMove(activePkmn[indexOfTrainer]);
         }
+        else {
+            System.out.println("Invalid choice, try again.");
+            chooseAction(indexOfTrainer);
+        }
     }
 
     private Move chooseMove(Pokemon pkmn) {
@@ -172,6 +176,11 @@ public class Game {
             System.out.println("What level will " + name + " be?");
             level = scan.nextInt();
             scan.nextLine();
+            if (level < 1 || level > 100) {
+                System.out.println("Level must be between 1 and 100, try again.");
+                i--;
+                continue;
+            }
             System.out.println();
 
             try {
@@ -181,7 +190,7 @@ public class Game {
                 initializeMoves(trainers[indexOfTrainer].getPkmn(i));
             }
             catch (IllegalArgumentException e) {
-                System.out.println("Invalid Pokemon name and/or level, try again.");
+                System.out.println("Invalid Pokemon name, try again.");
                 i--;
             }
         }
@@ -242,6 +251,7 @@ public class Game {
             }
         }
 
+        System.out.println("Invalid choice, try again.");
         sendPkmn(indexOfTrainer);
     }
 
