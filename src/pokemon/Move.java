@@ -110,12 +110,12 @@ public class Move {
 
     @Override
     public String toString() {
-        String toReturn = name + ": \n";
-        toReturn += "PP: " + pp + "/" + maxPp + "\n";
-        toReturn += category + " " + type + "\n";
+        String toReturn = name + "\n";
+        toReturn += "\tPP: " + pp + "/" + maxPp + "\n";
+        toReturn += "\t" + category + " " + type + "\n";
         
         if (!category.equals("Status")) {
-            toReturn += " " + power + " power\n";
+            toReturn += "\t" + power + " power";
         }
 
         return toReturn;

@@ -69,7 +69,7 @@ public class Pokemon {
         String toReturn = "";
         for (int i = 0; i < 4; i++) {
             if (moves[i] != null) {
-                toReturn += "" + (i + 1) + ". \n" + moves[i].toString() + "\n";
+                toReturn += "" + (i + 1) + "." + moves[i].toString() + "\n\n";
             }
         }
 

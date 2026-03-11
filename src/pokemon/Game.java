@@ -36,7 +36,7 @@ public class Game {
 
         winFlag = false;
 
-        System.out.println("Trainer One: ");
+        System.out.println("Trainer One: \n");
         initializeTrainer(0);
         System.out.println("Trainer Two: ");
         initializeTrainer(1);
@@ -60,6 +60,7 @@ public class Game {
             System.out.print(trainers[i].getName() + "'s " + activePkmn[i].getName());
             System.out.println(" " + activePkmn[i].getHp() + "/" + activePkmn[i].getMaxHp() + " HP");
         }
+        System.out.println();
 
         chooseAction(0);
         chooseAction(1);
@@ -74,6 +75,7 @@ public class Game {
         System.out.println("3. Use Item");
 
         String action = scan.nextLine();
+        System.out.println();
         if (action.equals("1") || action.toLowerCase().equals("attack")) {
             nextMoves[indexOfTrainer] = chooseMove(activePkmn[indexOfTrainer]);
         }
@@ -84,6 +86,7 @@ public class Game {
         System.out.println(pkmn.movesToString());
 
         String move = scan.nextLine();
+        System.out.println();
 
         for (int i = 0; i < pkmn.getMoves().length; i++) {
             if (pkmn.getMove(i) != null) {
@@ -123,6 +126,7 @@ public class Game {
 
         for (int i = 0; i < nextMoves.length; i++) {
             nextMoves[i].execute(activePkmn[i], activePkmn[(i + 1) % 2]);
+            System.out.println();
             if (activePkmn[(i + 1) % 2].getHp() == 0) {
                 System.out.println(activePkmn[(i + 1) % 2].getName() + " fainted!");
                 fainted[(i + 1) % 2] = true;
@@ -134,6 +138,7 @@ public class Game {
     private void initializeTrainer(int indexOfTrainer) {
         System.out.println("Enter your name:");
         trainers[indexOfTrainer] = new Trainer(scan.nextLine());
+        System.out.println();
         initializePokemon(indexOfTrainer);
     }
 
@@ -148,6 +153,7 @@ public class Game {
             }
 
             name = scan.nextLine();
+            System.out.println();
             if (name.equals("done") && i > 0) {
                 break;
             }
@@ -155,6 +161,7 @@ public class Game {
             System.out.println("What level will " + name + " be?");
             level = scan.nextInt();
             scan.nextLine();
+            System.out.println();
 
             try {
                 trainers[indexOfTrainer].addPkmn(new Pokemon(pokedex, name, level));
@@ -171,7 +178,7 @@ public class Game {
 
     private void initializeMoves(Pokemon pkmn) {
         String name;
-        System.out.println("What moves will " + pkmn.getName() + " know?");
+        System.out.println("What moves will " + pkmn.getName() + " know?\n");
 
         for (int i = 0; i < pkmn.getMoves().length; i++) {
             System.out.println("Enter move #" + (i + 1));
@@ -180,6 +187,7 @@ public class Game {
             }
 
             name = scan.nextLine();
+            System.out.println();
             if (name.equals("done") && i > 0) {
                 break;
             }
@@ -201,6 +209,7 @@ public class Game {
         activePkmn = new Pokemon[2];
         sendPkmn(0, 0);
         sendPkmn(1, 0);
+        System.out.println();
     }
 
     private void sendPkmn(int indexOfTrainer) {
