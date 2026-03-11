@@ -24,7 +24,7 @@ public class Pokemon {
         type = checkPkmn.type;
         this.level = level;
 
-        calculateStats(checkPkmn.hp, checkPkmn.atk, checkPkmn.def, checkPkmn.spAtk, checkPkmn.spDef, checkPkmn.speed)
+        calculateStats(checkPkmn.hp, checkPkmn.atk, checkPkmn.def, checkPkmn.spAtk, checkPkmn.spDef, checkPkmn.speed);
     }
 
     public Pokemon(Pokedex dex, String name) {
