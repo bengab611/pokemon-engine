@@ -49,10 +49,10 @@ public class Game {
             scan.nextLine();
 
             try {
-                trainer.addPokemon(new Pokemon(pokedex, name, level));
+                trainer.addPkmn(new Pokemon(pokedex, name, level));
 
-                System.out.println(trainer.getPokemon(i));
-                initializeMoves(trainer.getPokemon(i));
+                System.out.println(trainer.getPkmn(i));
+                initializeMoves(trainer.getPkmn(i));
             }
             catch (IllegalArgumentException e) {
                 System.out.println("Invalid Pokemon name and/or level, try again.");

@@ -9,7 +9,7 @@ public class Trainer {
         team = new Pokemon[6];
     }
 
-    public void addPokemon(Pokemon newPkmn) {
+    public void addPkmn(Pokemon newPkmn) {
         for (int i = 0; i < 6; i++) {
             if (team[i] == null) {
                 team[i] = newPkmn;
@@ -20,11 +20,11 @@ public class Trainer {
         System.out.println("Team already has six Pokemon.");
     }
 
-    public void replacePokemon(Pokemon newPkmn, int pkmnToReplace) {
+    public void replacePkmn(Pokemon newPkmn, int pkmnToReplace) {
         team[pkmnToReplace] = newPkmn;
     }
 
     public String getName() { return name; }
-    public Pokemon getPokemon(int index) { return team[index]; }
+    public Pokemon getPkmn(int index) { return team[index]; }
     public Pokemon[] getTeam() { return team; }
 }
