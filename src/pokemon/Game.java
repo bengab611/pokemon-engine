@@ -38,11 +38,20 @@ public class Game {
         initializeBattle();
 
         while (!winFlag) {
-            chooseAction(0);
-            chooseAction(1);
-            calculateMovePriority();
-            executeActions();
+            cycle();
         }
+    }
+
+    private void cycle() {
+        for (int i = 0; i < 2; i++) {
+            System.out.print(trainers[i].getName() + "'s " + activePkmn[i].getName());
+            System.out.println(" " + activePkmn[i].getHp() + "/" + activePkmn[i].getMaxHp() + " HP");
+        }
+
+        chooseAction(0);
+        chooseAction(1);
+        calculateMovePriority();
+        executeActions();
     }
 
     private void chooseAction(int indexOfTrainer) {
