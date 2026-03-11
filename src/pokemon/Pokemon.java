@@ -83,6 +83,8 @@ public class Pokemon {
     public int getSpAtk() { return spAtk; }
     public int getSpDef() { return spDef; }
     public int getSpeed() { return speed; }
+    public Move getMove(int index) { return moves[index]; }
+    public Move[] getMoves() { return moves; }
 
     private void calculateStats(int baseHp, int baseAtk, int baseDef, int baseSpAtk, int baseSpDef, int baseSpeed) {
         // Intger division is fine here, since the original formulas use the floor function after division
