@@ -395,7 +395,7 @@
         "condition": {
             "burn": 0.1
         },
-        "todo": true
+        "todo": false
     },
 
     "Fire Spin": {

@@ -186,7 +186,7 @@ public class Move {
         }
         damage *= typeMultiplier;
 
-        if (user.isBurned() && type == "Physical") {
+        if (user.isBurned() && category == "Physical") {
             damage *= 0.5;
         }
 
