@@ -12,6 +12,7 @@ public class Pokemon {
 
     private boolean condition;
     private boolean burned;
+    private boolean frozen;
 
     public Pokemon(Pokedex dex, String name, int level) {
         Pokemon checkPkmn = dex.getPkmn(name);
@@ -136,9 +137,12 @@ public class Pokemon {
     }
 
     public void setCondition(boolean condition) { this.condition = condition; }
-    public void burn() { burned = true; }
+    public void setBurn(boolean burned) { this.burned = burned; }
+    public void setFrozen(boolean frozen) { this.frozen = frozen; }
+
     public boolean hasCondition() { return condition; }
     public boolean isBurned() { return burned; }
+    public boolean isFrozen() { return frozen; }
 
     private void calculateStats(int baseHp, int baseAtk, int baseDef, int baseSpAtk, int baseSpDef, int baseSpeed) {
         // Intger division is fine here, since the original formulas use the floor function after division

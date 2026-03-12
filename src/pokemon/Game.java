@@ -89,7 +89,12 @@ public class Game {
 
         for (int i = 0; i < nextActions.length; i++) {
             if (nextActions[first].getType() == ActionType.ATTACK) {
-                nextActions[first].getMove().execute(typeChart, activePkmn[first], activePkmn[(first + 1) % 2]);
+                if (!activePkmn[first].isFrozen()) {
+                    nextActions[first].getMove().execute(typeChart, activePkmn[first], activePkmn[(first + 1) % 2]);
+                }
+                else {
+                    System.out.println(activePkmn[first].getName() + " is frozen solid!");
+                }
 
                 if (activePkmn[0].isFainted() || activePkmn[1].isFainted()) {
                     break;
@@ -134,10 +139,23 @@ public class Game {
 
     private void checkConditions() {
         for (int i = 0; i < activePkmn.length; i++) {
+            if (!activePkmn[i].hasCondition()) {
+                continue;
+            }
+
             if (activePkmn[i].isBurned()) {
                 System.out.println(activePkmn[i].getName() + " is hurt by its burn!");
                 int burnDamage = activePkmn[i].getMaxHp() / 16;
                 activePkmn[i].takeDamage(burnDamage);
+            }
+
+            if (activePkmn[i].isFrozen()) {
+                double thawRoll = rand.nextDouble();
+                if (thawRoll < 0.20) {
+                    activePkmn[i].setFrozen(false);
+                    activePkmn[i].setCondition(false);
+                    System.out.println(activePkmn[i].getName() + " thawed out!");
+                }
             }
         }
     }

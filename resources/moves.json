@@ -620,6 +620,9 @@
         "pp": 15,
         "power": 75,
         "accuracy": 1.0,
+        "condition": {
+            "freeze": 0.1
+        },
         "todo": true
     },
 

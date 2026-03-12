@@ -207,8 +207,17 @@ public class Move {
             double burnChance = (Double) condition.get("burn");
             if (conditionRoll < burnChance) {
                 target.setCondition(true);
-                target.burn();
+                target.setBurn(true);
                 System.out.println(target.getName() + " was burned!");
+            }
+        }
+
+        if (condition.get("freeze") != null) {
+            double freezeChance = (Double) condition.get("freeze");
+            if (conditionRoll < freezeChance) {
+                target.setCondition(true);
+                target.setFrozen(true);
+                System.out.println(target.getName() + " was frozen!");
             }
         }
     }
