@@ -31,11 +31,14 @@ public class Game {
 
         trainers = new Trainer[2];
         nextActions = new Action[2];
-        movePriority = new int[2];
         fainted = new boolean[2];
         
         for (int i = 0; i < fainted.length; i++) {
             fainted[i] = false;
+        }
+
+        for (int i = 0; i < movePriority.length; i++) {
+            movePriority[i] = 0;
         }
 
         winFlag = false;
@@ -97,6 +100,7 @@ public class Game {
             // TODO: make it so that nextMoves is a data structure that can store different kinds of actions
             // nextMoves[sendPkmn(indexOfTrainer)];
             nextActions[indexOfTrainer] = new Action(choosePkmn(indexOfTrainer));
+            movePriority[indexOfTrainer] += 2;
         }
 
         else if (action.equals("3") || action.toLowerCase().equals("item"))  {
@@ -131,18 +135,15 @@ public class Game {
 
     private void calculateMovePriority() {
         if (activePkmn[0].getSpeed() > activePkmn[1].getSpeed()) {
-            movePriority[0] = 1;
-            movePriority[1] = 0;
+            movePriority[0]++;
         }
 
         else if (activePkmn[0].getSpeed() < activePkmn[1].getSpeed()) {
-            movePriority[0] = 0;
-            movePriority[1] = 1;
+            movePriority[1]++;
         }
 
         else {
-            movePriority[0] = rand.nextInt() % 2;
-            movePriority[1] = (movePriority[0] + 1) % 2;
+            movePriority[rand.nextInt(2)]++;
         }
     }
 
@@ -198,6 +199,10 @@ public class Game {
                 fainted[(i + 1) % 2] = true;
                 break;
             }
+        }
+
+        for (int i = 0; i < movePriority.length; i++) {
+            movePriority[i] = 0;
         }
     }
 
