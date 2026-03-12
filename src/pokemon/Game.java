@@ -125,7 +125,13 @@ public class Game {
         for (int i = 0; i < pkmn.getMoves().length; i++) {
             if (pkmn.getMove(i) != null) {
                 if (move.equals(String.valueOf(i + 1)) || move.toLowerCase().equals(pkmn.getMove(i).getName().toLowerCase())) {
-                    return pkmn.getMove(i);
+                    if (pkmn.getMove(i).getPp() > 0) {
+                        return pkmn.getMove(i);
+                    }
+                    else {
+                        System.out.println(pkmn.getMove(i).getName() + " is out of pp! Choose another move.");
+                        return chooseMove(pkmn);
+                    }
                 }
             }
         }
