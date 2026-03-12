@@ -629,7 +629,10 @@
         "pp": 25,
         "power": 50,
         "accuracy": 1.0,
-        "todo": true
+        "effects": {
+            "increased_crit": 1
+        },
+        "todo": false
     },
 
     "Kinesis": {
@@ -737,7 +740,7 @@
         "pp": 20,
         "power": 80,
         "accuracy": 0.85,
-        "todo": true
+        "todo": false
     },
 
     "Metronome": {
@@ -800,7 +803,7 @@
         "pp": 20,
         "power": 40,
         "accuracy": 1.0,
-        "todo": true
+        "todo": false
     },
 
     "Peck": {
@@ -863,7 +866,7 @@
         "pp": 35,
         "power": 40,
         "accuracy": 1.0,
-        "todo": true
+        "todo": false
     },
 
     "Psybeam": {
@@ -1007,7 +1010,7 @@
         "pp": 35,
         "power": 40,
         "accuracy": 1.0,
-        "todo": true
+        "todo": false
     },
 
     "Screech": {
@@ -1430,7 +1433,7 @@
         "pp": 30,
         "power": 55,
         "accuracy": 1.0,
-        "todo": true
+        "todo": false
     },
 
     "Water Gun": {

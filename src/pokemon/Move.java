@@ -2,10 +2,13 @@ package pokemon;
 
 import java.util.Random;
 
+import org.json.simple.JSONObject;
+
 public class Move {
     private String name, category, type;
     private int power, pp, maxPp;
     private double accuracy;
+    private JSONObject effects;
 
     private Random random;
     private final int RANDOM_MIN = 85;
@@ -27,11 +30,12 @@ public class Move {
         this.pp = checkMove.pp;
         maxPp = pp;
         this.accuracy = checkMove.accuracy;
+        this.effects = checkMove.effects;
 
         random = new Random();
     }
 
-    public Move(String name, String category, String type, int power, int pp, double accuracy) {
+    public Move(String name, String category, String type, int power, int pp, double accuracy, JSONObject effects) {
         this.name = name;
         this.category = category;
         this.type = type;
@@ -39,6 +43,7 @@ public class Move {
         this.pp = pp;
         maxPp = pp;
         this.accuracy = accuracy;
+        this.effects = effects;
 
         random = new Random();
 
@@ -102,7 +107,32 @@ public class Move {
 
         damage = damage / 50 + 2;
 
-        int critMax = 24;
+        int critStage = user.getCritStage();
+        if (effects.get("increased_crit") != null) {
+            critStage += ((Long) effects.get("increased_crit")).intValue();
+        }
+        if (critStage > 3) {
+            critStage = 3;
+        }
+
+        int critMax;
+        switch (critStage) {
+            case 0: 
+                critMax = 24;
+                break;
+            case 1: 
+                critMax = 8;
+                break;
+            case 2: 
+                critMax = 2;
+                break;
+            case 3: 
+                critMax = 1;
+                break;
+            default:
+                critMax = 24;
+        }
+
         double critCalc = random.nextInt(critMax) + 1;
         if (critCalc == 1) {
             critical = true;

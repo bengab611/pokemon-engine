@@ -8,6 +8,7 @@ public class Pokemon {
     private String[] type;
     private int level;
     private int maxHp, hp, atk, def, spAtk, spDef, speed;
+    private int critStage;
 
     public Pokemon(Pokedex dex, String name, int level) {
         Pokemon checkPkmn = dex.getPkmn(name);
@@ -25,6 +26,8 @@ public class Pokemon {
         this.level = level;
 
         calculateStats(checkPkmn.hp, checkPkmn.atk, checkPkmn.def, checkPkmn.spAtk, checkPkmn.spDef, checkPkmn.speed);
+
+        critStage = 0;
     }
 
     public Pokemon(Pokedex dex, String name) {
@@ -88,6 +91,7 @@ public class Pokemon {
     public int getSpeed() { return speed; }
     public Move getMove(int index) { return moves[index]; }
     public Move[] getMoves() { return moves; }
+    public int getCritStage() { return critStage; }
 
     private void calculateStats(int baseHp, int baseAtk, int baseDef, int baseSpAtk, int baseSpDef, int baseSpeed) {
         // Intger division is fine here, since the original formulas use the floor function after division
