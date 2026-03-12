@@ -186,6 +186,10 @@ public class Move {
         }
         damage *= typeMultiplier;
 
+        if (user.isBurned() && type == "Physical") {
+            damage *= 0.5;
+        }
+
         if (Double.compare(damage % 1, 0.5) < 1E-9) {
             return (int) Math.floor(damage);
         }
