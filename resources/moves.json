@@ -287,7 +287,10 @@
         "pp": 10,
         "power": 15,
         "accuracy": 0.85,
-        "todo": true
+        "effects": {
+            "multistrike": 5
+        },
+        "todo": false
     },
 
     "Double Team": {

@@ -10,6 +10,8 @@ public class Move {
     private double accuracy;
     private JSONObject effects;
 
+    private final double[] MULTISTRIKE_ARRAY = {0.35, 0.35, 0.15, 0.15};
+
     private Random random;
     private final int RANDOM_MIN = 85;
     private final int RANDOM_MAX = 100;
@@ -60,13 +62,43 @@ public class Move {
             return;
         }
 
-        int damage = calculateDamage(typeChart, user, target);
-        if (damage > target.getHp()) {
-            damage = target.getHp();
+        int hits = 1;
+        if (effects != null && effects.get("multistrike") != null) {
+            if (((Long) effects.get("multistrike")).intValue() == 5) {
+                double multistrikeRoll = random.nextDouble();
+                double chanceTotal = 0.0;
+                for (int i = 0; i < MULTISTRIKE_ARRAY.length; i++) {
+                    chanceTotal += MULTISTRIKE_ARRAY[i];
+                    if (multistrikeRoll < chanceTotal) {
+                        hits = (i + 2);
+                        break;
+                    }
+                }
+            }
         }
 
-        if (typeMultiplier == 0.0) {
-            System.out.println("It doesn't affect " + target.getName() + "...");
+        for (int i = 0; i < hits; i++) {
+            int damage = calculateDamage(typeChart, user, target);
+
+            if (typeMultiplier == 0.0) {
+                System.out.println("It doesn't affect " + target.getName() + "...");
+                return;
+            }
+
+            if (damage > target.getHp()) {
+                damage = target.getHp();
+            }
+
+            target.takeDamage(damage);
+
+            if (critical) {
+                System.out.println("A critical hit!");
+                critical = false;
+            }
+
+            if (target.getHp() == 0) {
+                break;
+            }
         }
 
         if (typeMultiplier > 0.0 && typeMultiplier < 1.0) {
@@ -75,12 +107,6 @@ public class Move {
 
         if (typeMultiplier > 1.0) {
             System.out.println("It's super effective!");
-        }
-
-        target.takeDamage(damage);
-
-        if (critical) {
-            System.out.println("A critical hit!");
         }
     }
 
@@ -108,7 +134,7 @@ public class Move {
         damage = damage / 50 + 2;
 
         int critStage = user.getCritStage();
-        if (effects.get("increased_crit") != null) {
+        if (effects != null && effects.get("increased_crit") != null) {
             critStage += ((Long) effects.get("increased_crit")).intValue();
         }
         if (critStage > 3) {
