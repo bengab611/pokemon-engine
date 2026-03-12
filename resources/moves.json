@@ -1031,7 +1031,7 @@
     "Self-Destruct": {
         "type": "Normal",
         "category": "Physical",
-        "pp": 200,
+        "pp": 5,
         "power": 200,
         "accuracy": 1.0,
         "todo": true
