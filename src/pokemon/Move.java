@@ -8,7 +8,9 @@ public class Move {
     private String name, category, type;
     private int power, pp, maxPp;
     private double accuracy;
+
     private JSONObject effects;
+    private JSONObject condition;
 
     private final double[] MULTISTRIKE_ARRAY = {0.35, 0.35, 0.15, 0.15};
 
@@ -32,12 +34,14 @@ public class Move {
         this.pp = checkMove.pp;
         maxPp = pp;
         this.accuracy = checkMove.accuracy;
+
         this.effects = checkMove.effects;
+        this.condition = checkMove.condition;
 
         random = new Random();
     }
 
-    public Move(String name, String category, String type, int power, int pp, double accuracy, JSONObject effects) {
+    public Move(String name, String category, String type, int power, int pp, double accuracy, JSONObject effects, JSONObject condition) {
         this.name = name;
         this.category = category;
         this.type = type;
@@ -45,7 +49,9 @@ public class Move {
         this.pp = pp;
         maxPp = pp;
         this.accuracy = accuracy;
+
         this.effects = effects;
+        this.condition = condition;
 
         random = new Random();
 
@@ -85,10 +91,6 @@ public class Move {
                 return;
             }
 
-            if (damage > target.getHp()) {
-                damage = target.getHp();
-            }
-
             target.takeDamage(damage);
 
             if (critical) {
@@ -96,7 +98,7 @@ public class Move {
                 critical = false;
             }
 
-            if (target.getHp() == 0) {
+            if (target.isFainted()) {
                 break;
             }
         }
@@ -108,6 +110,10 @@ public class Move {
         if (typeMultiplier > 1.0) {
             System.out.println("It's super effective!");
         }
+
+        if (!target.isFainted()) {
+            inflictConditions(target);
+        }
     }
 
     public String getName() { return name; }
@@ -116,6 +122,8 @@ public class Move {
     public int getPower() { return power; }
     public int getPp() { return pp; }
     public double getAccuracy() { return accuracy; }
+
+    public boolean isOutOfPp() { return pp == 0; }
 
     private int calculateDamage(TypeChart typeChart, Pokemon user, Pokemon target) {
         if (category.equals("Status")) {
@@ -182,6 +190,23 @@ public class Move {
             return (int) Math.floor(damage);
         }
         return (int) Math.round(damage);
+    }
+
+    private void inflictConditions(Pokemon target) {
+        if (condition == null || target.hasCondition()) {
+            return;
+        }
+
+        double conditionRoll = random.nextDouble();
+
+        if (condition.get("burn") != null) {
+            double burnChance = (Double) condition.get("burn");
+            if (conditionRoll < burnChance) {
+                target.setCondition(true);
+                target.burn();
+                System.out.println(target.getName() + " was burned!");
+            }
+        }
     }
 
     @Override

@@ -10,32 +10,26 @@ public class Game {
 
     private Trainer[] trainers;
     private Pokemon[] activePkmn;
-    private boolean[] fainted;
-    //private Move[] nextMoves;
     private Action[] nextActions;
     private int[] movePriority;
 
     private boolean winFlag;
     private int indexOfWinner;
-    
+
     Scanner scan;
     Random rand;
 
     public Game() {
         scan = new Scanner(System.in);
         rand = new Random();
-        
+
         pokedex = new Pokedex();
         movedex = new Movedex();
         typeChart = new TypeChart();
 
         trainers = new Trainer[2];
+        activePkmn = new Pokemon[2];
         nextActions = new Action[2];
-        fainted = new boolean[2];
-        
-        for (int i = 0; i < fainted.length; i++) {
-            fainted[i] = false;
-        }
 
         movePriority = new int[2];
         for (int i = 0; i < movePriority.length; i++) {
@@ -44,28 +38,15 @@ public class Game {
 
         winFlag = false;
 
-        System.out.println("Trainer One: \n");
+        System.out.println("Trainer One:\n");
         initializeTrainer(0);
-        System.out.println("Trainer Two: ");
+        System.out.println("Trainer Two:\n");
         initializeTrainer(1);
-        
+
         initializeBattle();
 
         while (!winFlag) {
             cycle();
-            for (int i = 0; i < fainted.length; i++) {
-                if (fainted[i]) {
-                    if (trainers[i].isOutOfPkmn()) {
-                        System.out.println(trainers[i].getName() + " is out of usable Pokemon.\n");
-                        winFlag = true;
-                        indexOfWinner = (i + 1) % 2;
-                        break;
-                    }
-
-                    sendPkmn(i, choosePkmn(i));
-                    fainted[i] = false;
-                }
-            }
         }
 
         System.out.println(trainers[indexOfWinner].getName() + " wins!");
@@ -73,18 +54,95 @@ public class Game {
 
     private void cycle() {
         for (int i = 0; i < trainers.length; i++) {
-            System.out.print(trainers[i].getName() + "'s " + activePkmn[i].getName());
+            System.out.println(trainers[i].getName() + "'s " + activePkmn[i].getName());
             System.out.println(" " + activePkmn[i].getHp() + "/" + activePkmn[i].getMaxHp() + " HP");
         }
         System.out.println();
 
-        chooseAction(0);
-        chooseAction(1);
+        for (int i = 0; i < trainers.length; i++) {
+            nextActions[i] = chooseAction(i);
+        }
+
         calculateMovePriority();
+
         executeActions();
+
+        if (checkFainted()) {
+            return;
+        }
+
+        checkConditions();
+
+        if (checkFainted()) {
+            return;
+        }
     }
 
-    private void chooseAction(int indexOfTrainer) {
+    private void executeActions() {
+        int first;
+        if (movePriority[0] < movePriority[1]) {
+            first = 1;
+        }
+        else {
+            first = 0;
+        }
+
+        for (int i = 0; i < nextActions.length; i++) {
+            if (nextActions[first].getType() == ActionType.ATTACK) {
+                nextActions[first].getMove().execute(typeChart, activePkmn[first], activePkmn[(first + 1) % 2]);
+
+                if (activePkmn[0].isFainted() || activePkmn[1].isFainted()) {
+                    break;
+                }
+            }
+
+            else if (nextActions[first].getType() == ActionType.SWITCH) {
+                sendPkmn(i, nextActions[i].getSwitchIndex());
+            }
+
+            if (first == 0) {
+                first = 1;
+            }
+            else {
+                first = 0;
+            }
+
+            System.out.println();
+        }
+
+        for (int i = 0; i < movePriority.length; i++) {
+            movePriority[i] = 0;
+        }
+    }
+
+    private boolean checkFainted() {
+        for (int i = 0; i < activePkmn.length; i++) {
+            if (activePkmn[i].isFainted()) {
+                if (trainers[i].isOutOfPkmn()) {
+                    System.out.println(trainers[i].getName() + " is out of usable Pokemon.");
+                    winFlag = true;
+                    indexOfWinner = (i + 1) % 2;
+                    return true;
+                }
+
+                sendPkmn(i, choosePkmn(i));
+            }
+        }
+
+        return false;
+    }
+
+    private void checkConditions() {
+        for (int i = 0; i < activePkmn.length; i++) {
+            if (activePkmn[i].isBurned()) {
+                System.out.println(activePkmn[i].getName() + " is hurt by its burn!");
+                int burnDamage = activePkmn[i].getMaxHp() / 16;
+                activePkmn[i].takeDamage(burnDamage);
+            }
+        }
+    }
+
+    private Action chooseAction(int indexOfTrainer) {
         System.out.println("What will " + trainers[indexOfTrainer].getName() + " do?");
         System.out.println("1. Attack");
         System.out.println("2. Switch");
@@ -94,36 +152,27 @@ public class Game {
         System.out.println();
 
         if (action.equals("1") || action.toLowerCase().equals("attack")) {
-            nextActions[indexOfTrainer] = new Action(chooseMove(activePkmn[indexOfTrainer]));
+            return new Action(chooseMove(activePkmn[indexOfTrainer]));
         }
 
         else if (action.equals("2") || action.toLowerCase().equals("switch")) {
-            // TODO: make it so that nextMoves is a data structure that can store different kinds of actions
-            // nextMoves[sendPkmn(indexOfTrainer)];
-            nextActions[indexOfTrainer] = new Action(choosePkmn(indexOfTrainer));
             movePriority[indexOfTrainer] += 2;
+            return new Action(choosePkmn(indexOfTrainer));
         }
 
-        else if (action.equals("3") || action.toLowerCase().equals("item"))  {
-            System.out.println("TODO: Add items");
-            chooseAction(indexOfTrainer);
+        else if (action.equals("3") || action.toLowerCase().equals("item")) {
+            System.out.println("TODO: Add Items");
+            return chooseAction(indexOfTrainer);
         }
 
         else {
             System.out.println("Invalid choice, try again.");
-            chooseAction(indexOfTrainer);
+            return chooseAction(indexOfTrainer);
         }
     }
 
     private Move chooseMove(Pokemon pkmn) {
-        int outOfPp = 0;
-        for (Move checkMove : pkmn.getMoves()) {
-            if (checkMove != null && checkMove.getPp() > 0) {
-                break;
-            }
-            outOfPp++;
-        }
-        if (outOfPp == 4) {
+        if (pkmn.isOutOfPp()) {
             return movedex.getMove("Struggle");
         }
 
@@ -152,28 +201,16 @@ public class Game {
         return chooseMove(pkmn);
     }
 
-    private void calculateMovePriority() {
-        if (activePkmn[0].getSpeed() > activePkmn[1].getSpeed()) {
-            movePriority[0]++;
-        }
-
-        else if (activePkmn[0].getSpeed() < activePkmn[1].getSpeed()) {
-            movePriority[1]++;
-        }
-
-        else {
-            movePriority[rand.nextInt(2)]++;
-        }
-    }
-
     private int choosePkmn(int indexOfTrainer) {
         System.out.println("What pokemon would " + trainers[indexOfTrainer].getName() + " like to send out?");
         System.out.println(trainers[indexOfTrainer]);
 
         String nextPkmn = scan.nextLine();
+        System.out.println();
+
         for (int i = 0; i < trainers[indexOfTrainer].getTeam().length; i++) {
             if (nextPkmn.equals(String.valueOf(i + 1)) || nextPkmn.toLowerCase().equals(trainers[indexOfTrainer].getPkmn(i).getName().toLowerCase())) {
-                if (trainers[indexOfTrainer].getPkmn(i).getHp() == 0) {
+                if (trainers[indexOfTrainer].getPkmn(i).isFainted()) {
                     System.out.println("You can't send out a fainted Pokemon.");
                     break;
                 }
@@ -182,47 +219,24 @@ public class Game {
             }
         }
 
-        System.out.println("Invalid choice, try again.");
+        System.out.println("Invalid choice, try again");
         return choosePkmn(indexOfTrainer);
     }
-    
-    private void executeActions() {
-        if (movePriority[0] < movePriority[1]) {
-            Action tempAct = nextActions[0];
-            nextActions[0] = nextActions[1];
-            nextActions[1] = tempAct;
 
-            Pokemon tempPkmn = activePkmn[0];
-            activePkmn[0] = activePkmn[1];
-            activePkmn[1] = tempPkmn;
+    private void sendPkmn(int indexOfTrainer, int indexOfPkmn) {
+        activePkmn[indexOfTrainer] = trainers[indexOfTrainer].getPkmn(indexOfPkmn);
+        System.out.println(trainers[indexOfTrainer].getName() + " sent out " + activePkmn[indexOfTrainer].getName() + ".");
+    }
 
-            Trainer tempTrnr = trainers[0];
-            trainers[0] = trainers[1];
-            trainers[1] = tempTrnr;
-
-            boolean tempfntd = fainted[0];
-            fainted[0] = fainted[1];
-            fainted[1] = tempfntd;
-        }
-
-        for (int i = 0; i < nextActions.length; i++) {
-            if (nextActions[i].getType() == ActionType.ATTACK) {
-                nextActions[i].getMove().execute(typeChart, activePkmn[i], activePkmn[(i + 1) % 2]);
-            }
-            if (nextActions[i].getType() == ActionType.SWITCH) {
-                sendPkmn(i, nextActions[i].getSwitchIndex());
-            }
-            System.out.println();
-            if (activePkmn[(i + 1) % 2].getHp() == 0) {
-                System.out.println(activePkmn[(i + 1) % 2].getName() + " fainted!");
-                fainted[(i + 1) % 2] = true;
-                break;
+    private void calculateMovePriority() {
+        for (int i = 0; i < activePkmn.length; i++) {
+            if (activePkmn[i].getSpeed() > activePkmn[(i + 1) % 2].getSpeed()) {
+                movePriority[i]++;
+                return;
             }
         }
 
-        for (int i = 0; i < movePriority.length; i++) {
-            movePriority[i] = 0;
-        }
+        movePriority[rand.nextInt(2)]++;
     }
 
     private void initializeTrainer(int indexOfTrainer) {
@@ -237,37 +251,39 @@ public class Game {
         int level;
 
         for (int i = 0; i < trainers[indexOfTrainer].getTeam().length; i++) {
-            System.out.println("What will Pokemon #" + (i + 1) + " be?");
+            System.out.println("What will pokemon #" + (i + 1) + " be?");
             if (i > 0) {
-                System.out.println("To continue with " +  i + " Pokemon, enter \"done\".");
+                System.out.println("To continue with " + i + " Pokemon, enter \"done\".");
             }
 
             name = scan.nextLine();
             System.out.println();
+
             if (name.equals("done") && i > 0) {
                 break;
+            }
+
+            if (pokedex.getPkmn(name) == null) {
+                System.out.println("Invalid Pokemon name, try again.");
+                i--;
+                continue;
             }
 
             System.out.println("What level will " + name + " be?");
             level = scan.nextInt();
             scan.nextLine();
-            if (level < 1 || level > 100) {
-                System.out.println("Level must be between 1 and 100, try again.");
-                i--;
-                continue;
-            }
             System.out.println();
 
-            try {
-                trainers[indexOfTrainer].addPkmn(new Pokemon(pokedex, name, level));
+            while (level < 1 || level > 100) {
+                System.out.println("Level must be between 1 and 100, try again.");
+                level = scan.nextInt();
+                scan.nextLine();
+                System.out.println();
+            }
 
-                System.out.println(trainers[indexOfTrainer].getPkmn(i));
-                initializeMoves(trainers[indexOfTrainer].getPkmn(i));
-            }
-            catch (IllegalArgumentException e) {
-                System.out.println("Invalid Pokemon name, try again.");
-                i--;
-            }
+            trainers[indexOfTrainer].addPkmn(new Pokemon(pokedex, name, level));
+            System.out.println(trainers[indexOfTrainer].getPkmn(i));
+            initializeMoves(trainers[indexOfTrainer].getPkmn(i));
         }
     }
 
@@ -277,38 +293,34 @@ public class Game {
 
         for (int i = 0; i < pkmn.getMoves().length; i++) {
             System.out.println("Enter move #" + (i + 1));
+            
             if (i > 0) {
                 System.out.println("To continue with " + i + " moves, enter \"done\"");
             }
 
             name = scan.nextLine();
             System.out.println();
+            
             if (name.equals("done") && i > 0) {
                 break;
             }
 
-            try {
-                pkmn.addMove(new Move(movedex, name));
-            }
-            catch (IllegalArgumentException e) {
+            if (movedex.getMove(name) == null) {
                 System.out.println("Invalid move name, try again.");
                 i--;
+                continue;
             }
+
+            pkmn.addMove(new Move(movedex, name));
         }
     }
 
     private void initializeBattle() {
         System.out.println(trainers[0].getName() + " vs. " + trainers[1].getName());
         System.out.println("Battle!\n");
-        
-        activePkmn = new Pokemon[2];
+
         sendPkmn(0, 0);
         sendPkmn(1, 0);
         System.out.println();
-    }
-
-    private void sendPkmn(int indexOfTrainer, int indexOfPkmn) {
-        activePkmn[indexOfTrainer] = trainers[indexOfTrainer].getPkmn(indexOfPkmn);
-        System.out.println(trainers[indexOfTrainer].getName() + " sent out " + activePkmn[indexOfTrainer].getName() + ".");
     }
 }

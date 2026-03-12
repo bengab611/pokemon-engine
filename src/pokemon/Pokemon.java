@@ -10,6 +10,9 @@ public class Pokemon {
     private int maxHp, hp, atk, def, spAtk, spDef, speed;
     private int critStage;
 
+    private boolean condition;
+    private boolean burned;
+
     public Pokemon(Pokedex dex, String name, int level) {
         Pokemon checkPkmn = dex.getPkmn(name);
         if (checkPkmn == null) {
@@ -28,6 +31,8 @@ public class Pokemon {
         calculateStats(checkPkmn.hp, checkPkmn.atk, checkPkmn.def, checkPkmn.spAtk, checkPkmn.spDef, checkPkmn.speed);
 
         critStage = 0;
+
+        burned = false;
     }
 
     public Pokemon(Pokedex dex, String name) {
@@ -49,8 +54,16 @@ public class Pokemon {
     }
 
     public void takeDamage(int amount) {
+        if (amount > hp) {
+            amount = hp;
+        }
+
         hp -= amount;
         System.out.println(name + " took " + amount + " damage.");
+
+        if (hp == 0) {
+            System.out.println(name + " fainted!");
+        }
     }
 
     public void addMove(Move newMove) {
@@ -89,9 +102,43 @@ public class Pokemon {
     public int getSpAtk() { return spAtk; }
     public int getSpDef() { return spDef; }
     public int getSpeed() { return speed; }
-    public Move getMove(int index) { return moves[index]; }
+
+    public Move getMove(int index) { 
+        if (index < 0 || index > 3) {
+            return null;
+        }
+        return moves[index];
+    }
+
+    public Move getMove(String name) {
+        for (Move move : moves) {
+            if (move.getName().equals(name)) {
+                return move;
+            }
+        }
+
+        return null;
+    }
+
     public Move[] getMoves() { return moves; }
     public int getCritStage() { return critStage; }
+
+    public boolean isFainted() { return hp == 0; }
+    
+    public boolean isOutOfPp() {
+        for (Move move : moves) {
+            if (move != null && !move.isOutOfPp()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public void setCondition(boolean condition) { this.condition = condition; }
+    public void burn() { burned = true; }
+    public boolean hasCondition() { return condition; }
+    public boolean isBurned() { return burned; }
 
     private void calculateStats(int baseHp, int baseAtk, int baseDef, int baseSpAtk, int baseSpDef, int baseSpeed) {
         // Intger division is fine here, since the original formulas use the floor function after division

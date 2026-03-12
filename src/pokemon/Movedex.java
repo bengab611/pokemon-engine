@@ -36,6 +36,7 @@ public class Movedex {
             double accuracy;
             
             JSONObject effects;
+            JSONObject condition;
 
             for (Object key : allMoves.keySet()) {
                 // TODO: Remove conditional after comment is removed
@@ -55,8 +56,9 @@ public class Movedex {
                 accuracy = (Double) moveStats.get("accuracy");
 
                 effects = (JSONObject) moveStats.get("effects");
+                condition = (JSONObject) moveStats.get("condition");
 
-                moveMap.put(name, new Move(name, category, type, power, pp, accuracy, effects));
+                moveMap.put(name, new Move(name, category, type, power, pp, accuracy, effects, condition));
             }
         }
         catch (Exception e) {
