@@ -11,7 +11,8 @@ public class Game {
     private Trainer[] trainers;
     private Pokemon[] activePkmn;
     private boolean[] fainted;
-    private Move[] nextMoves;
+    //private Move[] nextMoves;
+    private Action[] nextActions;
     private int[] movePriority;
 
     private boolean winFlag;
@@ -29,7 +30,7 @@ public class Game {
         typeChart = new TypeChart();
 
         trainers = new Trainer[2];
-        nextMoves = new Move[2];
+        nextActions = new Action[2];
         movePriority = new int[2];
         fainted = new boolean[2];
         
@@ -57,7 +58,7 @@ public class Game {
                         break;
                     }
 
-                    sendPkmn(i);
+                    sendPkmn(i, choosePkmn(i));
                     fainted[i] = false;
                 }
             }
@@ -89,14 +90,13 @@ public class Game {
         System.out.println();
 
         if (action.equals("1") || action.toLowerCase().equals("attack")) {
-            nextMoves[indexOfTrainer] = chooseMove(activePkmn[indexOfTrainer]);
+            nextActions[indexOfTrainer] = new Action(chooseMove(activePkmn[indexOfTrainer]));
         }
 
         else if (action.equals("2") || action.toLowerCase().equals("switch")) {
             // TODO: make it so that nextMoves is a data structure that can store different kinds of actions
             // nextMoves[sendPkmn(indexOfTrainer)];
-            System.out.println("TODO: Add switching Pokemon");
-            chooseAction(indexOfTrainer);
+            nextActions[indexOfTrainer] = new Action(choosePkmn(indexOfTrainer));
         }
 
         else if (action.equals("3") || action.toLowerCase().equals("item"))  {
@@ -145,16 +145,53 @@ public class Game {
             movePriority[1] = (movePriority[0] + 1) % 2;
         }
     }
+
+    private int choosePkmn(int indexOfTrainer) {
+        System.out.println("What pokemon would " + trainers[indexOfTrainer].getName() + " like to send out?");
+        System.out.println(trainers[indexOfTrainer]);
+
+        String nextPkmn = scan.nextLine();
+        for (int i = 0; i < trainers[indexOfTrainer].getTeam().length; i++) {
+            if (nextPkmn.equals(String.valueOf(i + 1)) || nextPkmn.toLowerCase().equals(trainers[indexOfTrainer].getPkmn(i).getName().toLowerCase())) {
+                if (trainers[indexOfTrainer].getPkmn(i).getHp() == 0) {
+                    System.out.println("You can't send out a fainted Pokemon.");
+                    break;
+                }
+
+                return i;
+            }
+        }
+
+        System.out.println("Invalid choice, try again.");
+        return choosePkmn(indexOfTrainer);
+    }
     
     private void executeActions() {
         if (movePriority[0] < movePriority[1]) {
-            Move temp = nextMoves[0];
-            nextMoves[0] = nextMoves[1];
-            nextMoves[1] = temp;
+            Action tempAct = nextActions[0];
+            nextActions[0] = nextActions[1];
+            nextActions[1] = tempAct;
+
+            Pokemon tempPkmn = activePkmn[0];
+            activePkmn[0] = activePkmn[1];
+            activePkmn[1] = tempPkmn;
+
+            Trainer tempTrnr = trainers[0];
+            trainers[0] = trainers[1];
+            trainers[1] = tempTrnr;
+
+            boolean tempfntd = fainted[0];
+            fainted[0] = fainted[1];
+            fainted[1] = tempfntd;
         }
 
-        for (int i = 0; i < nextMoves.length; i++) {
-            nextMoves[i].execute(typeChart, activePkmn[i], activePkmn[(i + 1) % 2]);
+        for (int i = 0; i < nextActions.length; i++) {
+            if (nextActions[i].getType() == ActionType.ATTACK) {
+                nextActions[i].getMove().execute(typeChart, activePkmn[i], activePkmn[(i + 1) % 2]);
+            }
+            if (nextActions[i].getType() == ActionType.SWITCH) {
+                sendPkmn(i, nextActions[i].getSwitchIndex());
+            }
             System.out.println();
             if (activePkmn[(i + 1) % 2].getHp() == 0) {
                 System.out.println(activePkmn[(i + 1) % 2].getName() + " fainted!");
@@ -244,29 +281,6 @@ public class Game {
         sendPkmn(0, 0);
         sendPkmn(1, 0);
         System.out.println();
-    }
-
-    private void sendPkmn(int indexOfTrainer) {
-        System.out.println("What pokemon would " + trainers[indexOfTrainer].getName() + " like to send out?");
-        System.out.println(trainers[indexOfTrainer]);
-
-        // TODO: Handle having more than one of the same pokemon in team
-        String nextPkmn = scan.nextLine();
-        for (int i = 0; i < trainers[indexOfTrainer].getTeam().length; i++) {
-            if (nextPkmn.equals(String.valueOf(i + 1)) || nextPkmn.toLowerCase().equals(trainers[indexOfTrainer].getPkmn(i).getName().toLowerCase())) {
-                if (trainers[indexOfTrainer].getPkmn(i).getHp() == 0) {
-                    System.out.println("You can't send out a fainted Pokemon.");
-                    break;
-                }
-
-                activePkmn[indexOfTrainer] = trainers[indexOfTrainer].getPkmn(i);
-                System.out.println(trainers[indexOfTrainer].getName() + " sent out " + activePkmn[indexOfTrainer].getName() + ".");
-                return;
-            }
-        }
-
-        System.out.println("Invalid choice, try again.");
-        sendPkmn(indexOfTrainer);
     }
 
     private void sendPkmn(int indexOfTrainer, int indexOfPkmn) {
