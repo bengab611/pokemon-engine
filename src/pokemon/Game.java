@@ -116,6 +116,17 @@ public class Game {
     }
 
     private Move chooseMove(Pokemon pkmn) {
+        int outOfPp = 0;
+        for (Move checkMove : pkmn.getMoves()) {
+            if (checkMove != null && checkMove.getPp() > 0) {
+                break;
+            }
+            outOfPp++;
+        }
+        if (outOfPp == 4) {
+            return movedex.getMove("Struggle");
+        }
+
         System.out.println("Select a move: \n");
         System.out.println(pkmn.movesToString());
 
@@ -128,6 +139,7 @@ public class Game {
                     if (pkmn.getMove(i).getPp() > 0) {
                         return pkmn.getMove(i);
                     }
+
                     else {
                         System.out.println(pkmn.getMove(i).getName() + " is out of pp! Choose another move.");
                         return chooseMove(pkmn);
