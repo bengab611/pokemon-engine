@@ -82,14 +82,28 @@ public class Game {
     private void chooseAction(int indexOfTrainer) {
         System.out.println("What will " + trainers[indexOfTrainer].getName() + " do?");
         System.out.println("1. Attack");
-        System.out.println("2. Switch Pokemon");
-        System.out.println("3. Use Item");
+        System.out.println("2. Switch");
+        System.out.println("3. Item");
 
         String action = scan.nextLine();
         System.out.println();
+
         if (action.equals("1") || action.toLowerCase().equals("attack")) {
             nextMoves[indexOfTrainer] = chooseMove(activePkmn[indexOfTrainer]);
         }
+
+        else if (action.equals("2") || action.toLowerCase().equals("switch")) {
+            // TODO: make it so that nextMoves is a data structure that can store different kinds of actions
+            // nextMoves[sendPkmn(indexOfTrainer)];
+            System.out.println("TODO: Add switching Pokemon");
+            chooseAction(indexOfTrainer);
+        }
+
+        else if (action.equals("3") || action.toLowerCase().equals("item"))  {
+            System.out.println("TODO: Add items");
+            chooseAction(indexOfTrainer);
+        }
+
         else {
             System.out.println("Invalid choice, try again.");
             chooseAction(indexOfTrainer);
