@@ -170,7 +170,10 @@
         "pp": 15,
         "power": 18,
         "accuracy": 0.85,
-        "todo": true
+        "effects": {
+            "multistrike": 5
+        },
+        "todo": false
     },
 
     "Confuse Ray": {
