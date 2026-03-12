@@ -96,6 +96,16 @@ public class Game {
                     System.out.println(activePkmn[first].getName() + " is frozen solid!");
                 }
 
+                if (nextActions[first].getMove().getType().equals("Fire") &&
+                    (nextActions[first].getMove().getCategory().equals("Physical") ||
+                    nextActions[first].getMove().getCategory().equals("Special")) && 
+                    activePkmn[(first + 1) % 2].isFrozen()) {
+                    
+                    activePkmn[(first + 1) % 2].setFrozen(false);
+                    activePkmn[(first + 1) % 2].setCondition(false);
+                    System.out.println(activePkmn[(first + 1) % 2].getName() + " thawed out!");
+                }
+
                 if (activePkmn[0].isFainted() || activePkmn[1].isFainted()) {
                     break;
                 }
