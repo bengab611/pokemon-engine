@@ -37,6 +37,7 @@ public class Game {
             fainted[i] = false;
         }
 
+        movePriority = new int[2];
         for (int i = 0; i < movePriority.length; i++) {
             movePriority[i] = 0;
         }
