@@ -135,7 +135,7 @@ public class Game {
             movePriority[1] = 0;
         }
 
-        if (activePkmn[0].getSpeed() < activePkmn[1].getSpeed()) {
+        else if (activePkmn[0].getSpeed() < activePkmn[1].getSpeed()) {
             movePriority[0] = 0;
             movePriority[1] = 1;
         }
