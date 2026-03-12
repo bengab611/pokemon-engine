@@ -1,6 +1,5 @@
 package pokemon;
 
-import java.util.HashMap;
 import java.util.ArrayList;
 import java.io.FileReader;
 
@@ -10,17 +9,17 @@ import org.json.simple.parser.JSONParser;
 public class TypeChart {
     private final String JSON_FILE_PATH = "resources/typeChart.json";
 
-    private HashMap<String, HashMap<String, Double>> typeMap;
     private ArrayList<String> types;
+    private double[][] chart;
 
     public TypeChart() {
         initializeTypes();
-        initializeMap();
+        initializeChart();
         addEffectiveness();
     }
 
     public double getEffectiveness(String attackType, String defenseType) {
-        return typeMap.get(attackType).get(defenseType);
+        return chart[types.indexOf(attackType)][types.indexOf(defenseType)];
     }
 
     private void initializeTypes() {
@@ -46,17 +45,13 @@ public class TypeChart {
         types.add("Fairy");
     }
 
-    private void initializeMap() {
-        typeMap = new HashMap<>();
+    private void initializeChart() {
+        chart = new double[types.size()][types.size()];
 
-        for (String attackType : types) {
-            HashMap<String, Double> innerMap = new HashMap<>();
-
-            for (String defenseType : types) {
-                innerMap.put(defenseType, 1.0);
+        for (int i = 0; i < types.size(); i++) {
+            for (int j = 0; j < types.size(); j++) {
+                chart[i][j] = 1.0;
             }
-
-            typeMap.put(attackType, innerMap);
         }
     }
 
@@ -66,18 +61,12 @@ public class TypeChart {
             JSONObject matchups = (JSONObject) parser.parse(new FileReader(JSON_FILE_PATH));
 
             JSONObject defenseTypes;
-            String attackType, defenseType;
-            double effectiveness;
 
             for (Object key : matchups.keySet()) {
                 defenseTypes = (JSONObject) matchups.get(key);
 
-                attackType = (String) key;
                 for (Object innerKey : defenseTypes.keySet()) {
-                    defenseType = (String) innerKey;
-                    effectiveness = (Double) defenseTypes.get(innerKey);
-
-                    typeMap.get(attackType).put(defenseType, effectiveness);
+                    chart[types.indexOf((String) key)][types.indexOf((String) innerKey)] = (Double) defenseTypes.get(innerKey);
                 }
             }
         }

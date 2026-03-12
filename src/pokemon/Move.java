@@ -117,7 +117,7 @@ public class Move {
         }
 
         typeMultiplier = typeChart.getEffectiveness(type, target.getType()[0]);
-        if (target.getType()[1] != null) {
+        if (!target.getType()[1].equals("")) {
             typeMultiplier *= typeChart.getEffectiveness(type, target.getType()[1]);
         }
         damage *= typeMultiplier;
